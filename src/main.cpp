@@ -24,13 +24,16 @@
 #include <MQ135.h>
 
 #include <BH1750.h>
+
+#include "WiFiScan.h"
+
 //=======================================================================
 //                           Declarations  
 //=======================================================================
 
 String handleIndex();
 
-struct WiFi_scan_result;
+//struct WiFi_scan_result;
 
 int dBmtoPercentage(int dBm);
 
@@ -38,8 +41,7 @@ int dBmtoPercentage(int dBm);
 //                         Global Variables
 //=======================================================================
 
-#define RSSI_MAX -50        // define maximum strength of signal in dBm
-#define RSSI_MIN -100      // define minimum strength of signal in dBm
+
 
 #define dSecond 1000
 #define dMinute 1000*60
@@ -227,7 +229,41 @@ void setup() {
   //*/
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    server.send(200, "text/html", handleIndex());
+    request->send(200, "text/html", handleIndex());
+  });
+
+  server.on("/updateWifi",[](AsyncWebServerRequest *request){
+    updateScannedWiFis(scanned_Wifis,WiFi);
+
+    String index_html;
+    index_html.reserve(1024);
+
+    index_html+="<table>";
+    index_html+="<tr class=\"item\"><td>SSID</td><td>Signal</td><td>Encryption</td></tr>";
+
+    for(std::vector<WiFi_scan_result>::iterator i = scanned_Wifis.begin(); i != scanned_Wifis.end(); i++)
+    {
+      index_html+="<tr class=\"item\">";
+
+      index_html+=!(i->SSID[0] == '\0' || i->SSID[0] == '0') ? "<td>" : "<td class=\"hidden\">"; 
+      index_html+=!(i->SSID[0] == '\0' || i->SSID[0] == '0') ? i->SSID : "SSID Hidden";
+      index_html+="</td>";
+
+      index_html+="<td>";
+      index_html+=dBmtoPercentage(i->RSSI);
+      index_html+="\%";
+      index_html+="\n";
+      index_html+="</td>";
+
+      index_html+="<td>";
+      index_html+=i->encryptionType;
+      index_html+="</td>";
+
+      index_html+="</tr>";
+    }
+    index_html+="</table>";
+
+    request->send(200, "text/plane",index_html);
   });
 
 
@@ -241,7 +277,7 @@ void setup() {
 
 void loop() {
 
-  server.handleClient();
+  //server.handleClient();
 
 
   if(millis()-DHT22Interval<2000)
@@ -282,7 +318,7 @@ void serialEvent()
 //                          Definitions  
 //=======================================================================
 
-struct WiFi_scan_result{
+/*struct WiFi_scan_result{
   int8_t RSSI;
   uint8_t encryptionType;
   char SSID[32];
@@ -290,7 +326,6 @@ struct WiFi_scan_result{
 
 void updateScannedWiFis()
 {
-  
   WiFi.scanNetworksAsync([](int arg){
     scanned_Wifis.clear();
     scanned_Wifis.reserve(arg);
@@ -320,7 +355,7 @@ int dBmtoPercentage(int dBm)
    }
 
   return quality;
-}
+}*/
 
 //=======================================================================
 //                          HTML Pages 
