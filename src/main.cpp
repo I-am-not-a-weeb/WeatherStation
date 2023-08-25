@@ -77,9 +77,10 @@ volatile float air_quality = 0.0;
 volatile float lux = 0.0;
 
 volatile int countRPM = 0;
-
 volatile int mSec = 0;
 volatile int fanRPM = 0;
+
+volatile int fanReadings[5] = {0,0,0,0,0};
 
 //=======================================================================
 //                            Interrupts     
@@ -88,8 +89,6 @@ volatile int fanRPM = 0;
 ESP8266Timer ITimer;
 
 ESP8266_ISR_Timer ISR_Timer;
-
-volatile int fanReadings[5] = {0,0,0,0,0};
 
 void IRAM_ATTR counterRPM()
 {
