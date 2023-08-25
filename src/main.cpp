@@ -376,7 +376,24 @@ String handleIndex()
       body{align-items:center;}
       .grid-addons{display: grid;grid-template-columns: repeat(auto-fill, 20em);grid-gap: 1rem;justify-content: space-between; /* 4 */}
       .WIFI{background-color: #FFA07A; width:100%; height:100%;  border-style: solid; border-color: black; font-size:10px;}
-    </style></head>
+    </style>
+    <script>
+    function updateWiFi()
+    {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("WIFI").innerHTML = this.responseText;
+        }
+    }
+    document.getElementById("WIFI").innerHTML = "Updating...";
+    xhttp.open("GET", "updateWifi", true);
+    xhttp.send()
+    }
+
+    </script>
+    </head>
     <body><h1>ESP8266 Web Server</h1>)rawliteral";  
 
   index_html+="<div class=\"grid-addons\">";
