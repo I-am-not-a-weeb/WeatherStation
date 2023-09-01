@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <vector>
 
-
 #include <NTPClient.h>
 #include <LittleFS.h>
 #include <FSTools.h>
@@ -27,6 +26,8 @@
 
 #include "WiFiScan.h"
 
+#include "json/json-forwards.h"
+
 //=======================================================================
 //                           Declarations  
 //=======================================================================
@@ -41,7 +42,7 @@ int dBmtoPercentage(int dBm);
 //                         Global Variables
 //=======================================================================
 
-
+Json::Value root;
 
 #define dSecond 1000
 #define dMinute 1000*60
@@ -246,6 +247,10 @@ void setup() {
 
       index_html+=!(i->SSID[0] == '\0' || i->SSID[0] == '0') ? "<td>" : "<td class=\"hidden\">"; 
       index_html+=!(i->SSID[0] == '\0' || i->SSID[0] == '0') ? i->SSID : "SSID Hidden";
+
+      //index_html+="<td>";
+      //index_html+= i->SSID;
+
       index_html+="</td>";
 
       index_html+="<td>";
@@ -277,7 +282,7 @@ void setup() {
 void loop() {
 
   //server.handleClient();
-
+  for(unsigned int =)
 
   if(millis()-DHT22Interval<2000)
   {
@@ -397,7 +402,7 @@ String handleIndex()
     <body><h1>ESP8266 Web Server</h1>)rawliteral";  
 
   index_html+="<div class=\"grid-addons\">";
-  index_html+="<div class=\"WIFI\">";              // klocek z wifi
+  index_html+="<div class=\"WIFI\" id=\"WIFI\">";              // klocek z wifi
   index_html+="<table>";
   index_html+="<tr class=\"item\"><td>SSID</td><td>Signal</td><td>Encryption</td></tr>";
 
@@ -423,7 +428,15 @@ String handleIndex()
   }
   index_html+="</table>";
   index_html+="</div>";
-
+  index_html+=R"rawliteral(<div>
+        <button class="button" onclick="updateWiFi()">Scan</button>
+        <button class="button">Connect</button>
+      </div>
+      <div class="add">
+        <div class="add-inside">
+          &plus;
+        </div>
+      </div>)rawliteral";
   return index_html;
 }
 

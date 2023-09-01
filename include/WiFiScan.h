@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef _STDIO_H_
 #include <stdio.h>
 #endif 
@@ -22,11 +24,17 @@ void updateScannedWiFis(std::vector<WiFi_scan_result> &scanned_Wifis,ESP8266WiFi
     scanned_Wifis.reserve(arg);
     for(int i = 0; i<arg;i++)
     {
-      scanned_Wifis.push_back(WiFi_scan_result{(char)WiFi.RSSI(i),WiFi.encryptionType(i),*WiFi.SSID(i).c_str()});
+      char tmp_str[32]; 
+      strcpy(tmp_str,WiFi.SSID(i).c_str());
+
+      WiFi_scan_result tmp{(char)WiFi.RSSI(i),WiFi.encryptionType(i)};
+
+      strcpy(tmp.SSID,tmp_str);
+      scanned_Wifis.push_back(tmp);
     }
+    WiFi.scanDelete();    // exception
   },true);
 
-  WiFi.scanDelete();
 }
 
 int dBmtoPercentage(int dBm)
