@@ -1,0 +1,185 @@
+#include “json/json.h”
+
+#include <fstream>
+
+#include <iostream>
+
+/** \brief Parse from stream, collect comments and capture error info.
+
+* Example Usage:
+
+* $g++ readFromStream.cpp -ljsoncpp -std=c++11 -o readFromStream
+
+* $./readFromStream <file to be parsed>
+
+* // comment head
+
+* {
+
+* // comment before
+
+* “key” : “value”
+
+* }
+
+* // comment after
+
+* // comment tail
+
+*/
+
+void printroot(Json::Value root)
+{
+    Json::Value::iterator itr = root.begin();
+
+    std::string name;
+
+    int i = 0;
+
+    for (itr = root.begin() ; itr != root.end(); itr++ )
+    {
+
+        name = root.getMemberNames()[i];
+        if (root[name].isInt())
+        {
+        std::cout << “MemeberName “ << name << “ int “ << std::endl;
+        std::cout << root[name].asInt() << std::endl;
+        }
+
+        else if (root[name].isDouble())
+        {
+        std::cout << “MemeberName “ << name << “ double “ << std::endl;
+        std::cout << root[name].asDouble() << std::endl;
+        }
+        else if (root[name].isBool())
+        {
+
+std::cout << “MemeberName “ << name << “ bool “ << std::endl;
+
+std::cout << root[name].asBool() << std::endl;
+
+}
+
+else if (root[name].isArray())
+
+{
+
+std::cout << “MemeberName “ << name << “ array size “ << root[name].size() <<std::endl;
+
+int size = root[name].size();
+
+for (int i = 0; i < size; i++)
+
+{
+
+Json::Value dat1 = root[name];
+
+printroot(dat1.get(i,root[name]));
+
+}
+
+{
+
+std::cout << “MemeberName “ << name << “ array is object “ << std::endl;
+
+}
+
+}
+
+else if (root[name].isInt64())
+
+{
+
+std::cout << “MemeberName “ << name << “ array “ << std::endl;
+
+std::cout << root[name].asInt64() << std::endl;
+
+}
+
+else if (root[name].isString())
+
+{
+
+std::cout << “MemeberName “ << name << “ string “ << std::endl;
+
+std::cout << root[name].asString() << std::endl;
+
+}
+
+else if (root[name].isObject())
+
+{
+
+std::cout << “MemeberName “ << name << “ object “ << std::endl;
+
+printroot(root[name]);
+
+//std::cout << root[name].asCString() << std::endl;
+
+}
+
+else
+
+{
+
+std::cout << “MemeberName “ << name << “ unknown type “ << std::endl;
+
+//std::cout << root[name].asCString() << std::endl;
+
+}
+
+i++;
+
+}
+
+}
+
+int main(int argc, char* argv[]) {
+
+    Json::Value root;
+
+    std::ifstream ifs;
+
+    //Add the code to check if file can be opened
+
+    std::string filename = argv[1];
+
+    std::ifstream ifs(filename, std::ios::in);
+
+    if (!ifs.is_open() || !ifs.good())
+    {
+        const char * errorStr = strerror(errno);
+
+        std::cout << “Failed to open Json file “ << filename.c_str() << “ “ << errorStr << std::endl;
+
+        return EXIT_FAILURE;
+    }
+
+    Json::CharReaderBuilder builder;
+
+    builder[“collectComments”] = true;
+
+    JSONCPP_STRING errs;
+
+    if (!parseFromStream(builder, ifs, &root, &errs)) 
+    {
+    std::cout << errs << std::endl;
+    return EXIT_FAILURE;
+    }
+
+    Json::Value fromAddr = root[“ShpmId”];
+
+    if (root.isMember(“NewShpmNum”))
+    {
+    std::cout << “ string found\n”;
+    }
+    else
+    {
+    std::cout << “ string NOT found\n”;
+    }
+
+    printroot(root);
+
+    return EXIT_SUCCESS;
+
+}

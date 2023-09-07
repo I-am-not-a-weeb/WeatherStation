@@ -27,9 +27,8 @@
 
 #include "WiFiScan.h"
 
-#include "json/json-forwards.h"
+#include <ArduinoJson.h>
 
-#include "json/json.h"
 
 //=======================================================================
 //                           Declarations  
@@ -45,15 +44,13 @@ int dBmtoPercentage(int dBm);
 //                         Global Variables
 //=======================================================================
 
-Json::Value configJson;
 
 #define dSecond 1000
 #define dMinute 1000*60
 #define dHour 1000*60*60
 #define dDay 1000*60*60*24
 
-std::fstream configFile("config.json", std::ios::in | std::ios::out | std::ios::app);
-
+File configFile;
 
 char ssid[]     = "TP-Kink";
 char password[] = "21371488";
@@ -174,14 +171,31 @@ void printSerial()
 void setup() {
   Serial.begin(115200);
 
-  Json::CharReaderBuilder reader;
-  
-  std::string jsonErrs;
-  Json::parseFromStream(reader, configFile, &configJson, &jsonErrs);
+  if(!LittleFS.begin())
+  {
+    Serial.println("Error: LittleFS mount failed!");
+  }
 
+  configFile = LittleFS.open("/config.json", "r");
+
+  StaticJsonDocument<256> configJson;
+
+  DeserializationError jsonErrs;
+
+
+  if(!Json::parseFromStream(builder, configStream, &configJson, &jsonErrs))
+  {
+    Serial.println("Error parsing config file");
+    Serial.println(jsonErrs.c_str());
+  }
+  Serial.println(configJson["wifi"].asCString());
+
+  Serial.print(configJson.asCString());
+
+  delay(5600);
   for(unsigned short int i = 0; i < configJson["wifi"].size(); i++)
   {
-    Serial.println(String("Trying: ") + configJson["wifi"][i]["ssid"].asString());
+    //Serial.println(String("Trying: ") + configJson["wifi"][i]["ssid"].asString());
 
     WiFi.begin(ssid, password);
 
@@ -200,7 +214,18 @@ void setup() {
   {
     Serial.println("WiFi not connected");
   }
-
+  else
+  {
+    Serial.println("Connected");
+    Serial.println(WiFi.localIP());
+    Serial.println(WiFi.macAddress());
+    Serial.println(WiFi.SSID());  
+    Serial.println(WiFi.RSSI());
+    Serial.println(WiFi.BSSIDstr());
+    Serial.println(WiFi.channel());
+  }
+ 
+  //GMT = configJson["system"]["timezone"].asInt();
 
   //WiFi.begin(ssid, password);  
 
@@ -209,23 +234,11 @@ void setup() {
     Serial.print ( "." );
   }*/
 
-  Serial.println ("Connected");
-  Serial.println(WiFi.localIP());
-  Serial.println(WiFi.macAddress());
-  Serial.println(WiFi.SSID());  
-  Serial.println(WiFi.RSSI());
-  Serial.println(WiFi.BSSIDstr());
-  Serial.println(WiFi.channel());
-
   WiFi.softAP("test_test", "21371488");
   Serial.println("AP started");
   Serial.println(WiFi.softAPIP());
   Serial.println(WiFi.softAPmacAddress());
 
-
-  
-  
-  
 
   timeClient.setTimeOffset(3600*GMT);
 
