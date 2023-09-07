@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <vector>
+#include <fstream>
 
 #include <NTPClient.h>
 #include <LittleFS.h>
@@ -28,6 +29,8 @@
 
 #include "json/json-forwards.h"
 
+#include "json/json.h"
+
 //=======================================================================
 //                           Declarations  
 //=======================================================================
@@ -42,14 +45,15 @@ int dBmtoPercentage(int dBm);
 //                         Global Variables
 //=======================================================================
 
-Json::Value root;
+Json::Value configJson;
 
 #define dSecond 1000
 #define dMinute 1000*60
 #define dHour 1000*60*60
 #define dDay 1000*60*60*24
 
-//test test
+std::fstream configFile("config.json", std::ios::in | std::ios::out | std::ios::app);
+
 
 char ssid[]     = "TP-Kink";
 char password[] = "21371488";
@@ -58,6 +62,8 @@ AsyncWebServer server(80);
 //ESP8266WebServer server(80);
 
 WiFiUDP ntpUDP;
+
+int GMT = 0;
 
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600, 60000);
 
@@ -166,15 +172,42 @@ void printSerial()
 //=======================================================================
 
 void setup() {
-
   Serial.begin(115200);
 
-  WiFi.begin(ssid, password);  
+  Json::CharReaderBuilder reader;
+  
+  std::string jsonErrs;
+  Json::parseFromStream(reader, configFile, &configJson, &jsonErrs);
 
-  while ( WiFi.status() != WL_CONNECTED ) {
+  for(unsigned short int i = 0; i < configJson["wifi"].size(); i++)
+  {
+    Serial.println(String("Trying: ") + configJson["wifi"][i]["ssid"].asString());
+
+    WiFi.begin(ssid, password);
+
+    for(unsigned short int j = 0; j < 6 && (WiFi.status() != WL_CONNECTED); j++)
+    {
+      delay ( 1000 );
+      Serial.print ( "." );
+    }
+
+    if(WiFi.status()==WL_CONNECTED) break;
+
+    WiFi.disconnect();
+  }
+
+  if(WiFi.status()!=WL_CONNECTED)
+  {
+    Serial.println("WiFi not connected");
+  }
+
+
+  //WiFi.begin(ssid, password);  
+
+  /*while ( WiFi.status() != WL_CONNECTED ) {
     delay ( 1000 );
     Serial.print ( "." );
-  }
+  }*/
 
   Serial.println ("Connected");
   Serial.println(WiFi.localIP());
@@ -188,6 +221,13 @@ void setup() {
   Serial.println("AP started");
   Serial.println(WiFi.softAPIP());
   Serial.println(WiFi.softAPmacAddress());
+
+
+  
+  
+  
+
+  timeClient.setTimeOffset(3600*GMT);
 
   timeClient.begin();
 
@@ -272,6 +312,7 @@ void setup() {
     request->send(200, "text/plane",index_html);
   });
 
+  timeClient.update();
 
   server.begin();
 }
@@ -284,7 +325,7 @@ void setup() {
 void loop() {
 
   //server.handleClient();
-  for(unsigned int =)
+ 
 
   if(millis()-DHT22Interval<2000)
   {
@@ -309,6 +350,7 @@ void loop() {
     serialInterval = millis();
   }
 }
+
 void serialEvent() 
 {
   if(Serial.available()){
@@ -324,44 +366,7 @@ void serialEvent()
 //                          Definitions  
 //=======================================================================
 
-/*struct WiFi_scan_result{
-  int8_t RSSI;
-  uint8_t encryptionType;
-  char SSID[32];
-};
 
-void updateScannedWiFis()
-{
-  WiFi.scanNetworksAsync([](int arg){
-    scanned_Wifis.clear();
-    scanned_Wifis.reserve(arg);
-    for(int i = 0; i<arg;i++)
-    {
-      scanned_Wifis.push_back(WiFi_scan_result{(char)WiFi.RSSI(i),WiFi.encryptionType(i),*WiFi.SSID(i).c_str()});
-    }
-  },true);
-
-  WiFi.scanDelete();
-}
-
-int dBmtoPercentage(int dBm)
-{
-  int quality;
-    if(dBm <= RSSI_MIN)
-    {
-        quality = 0;
-    }
-    else if(dBm >= RSSI_MAX)
-    {  
-        quality = 100;
-    }
-    else
-    {
-        quality = 2 * (dBm + 100);
-   }
-
-  return quality;
-}*/
 
 //=======================================================================
 //                          HTML Pages 

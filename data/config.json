@@ -1,0 +1,30 @@
+{
+    "wifi":
+    [
+        {
+            "ssid": "TP-Kink",
+            "password": "21371488"
+        },
+        {
+            "ssid": "your_ssid",
+            "password": "your_password"
+        }
+    ],
+    "system":
+    {
+        "timezone": 1
+    },
+    "GPIOs":
+    {
+        "A0":{},
+        "D0":{},
+        "D1":{},
+        "D2":{},
+        "D3":{},
+        "D4":{},
+        "D5":{},
+        "D6":{},
+        "D7":{},
+        "D8":{}
+    }
+}
