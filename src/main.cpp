@@ -314,7 +314,9 @@ void setup() {
 
       index_html+="</tr>";
     }
+    index_html+="<button class=\"button\" onclick=\"updateWiFi()\">Scan</button>";
     index_html+="</table>";
+    
 
     request->send(200, "text/plane",index_html);
   });
@@ -397,30 +399,30 @@ String handleIndex()
       .WIFI{background-color: #FFA07A; width:100%; height:100%;  border-style: solid; border-color: black; font-size:10px;}
     </style>
     <script>
-    function updateWiFi()
-    {
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+      function updateWiFi()
+      {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200)
         {
             document.getElementById("WIFI").innerHTML = this.responseText;
         }
-    }
-    document.getElementById("WIFI").innerHTML = "Updating...";
-    xhttp.open("GET", "updateWifi", true);
-    xhttp.send()
-    }
-
+      }
+      document.getElementById("WIFI").innerHTML = "Updating...";
+      xhttp.open("GET", "updateWifi", true);
+      xhttp.send()
+      }
     </script>
     </head>
-    <body><h1>ESP8266 Web Server</h1>)rawliteral";  
+    <body><h1>ESP8266 Web Server</h1>; 
+      <div class="grid-addons">
+      <div class="WIFI" id="WIFI">             
+        <table>
+          <tr class="item"><td>SSID</td><td>Signal</td><td>Encryption</td></tr>
+          Refresh
+          )rawliteral";
 
-  index_html+="<div class=\"grid-addons\">";
-  index_html+="<div class=\"WIFI\" id=\"WIFI\">";              // klocek z wifi
-  index_html+="<table>";
-  index_html+="<tr class=\"item\"><td>SSID</td><td>Signal</td><td>Encryption</td></tr>";
-
-  for(std::vector<WiFi_scan_result>::iterator i = scanned_Wifis.begin(); i != scanned_Wifis.end(); i++)
+  /*for(std::vector<WiFi_scan_result>::iterator i = scanned_Wifis.begin(); i != scanned_Wifis.end(); i++)
   {
     index_html+="<tr class=\"item\">";
             
@@ -439,12 +441,14 @@ String handleIndex()
     index_html+="</td>";
 
     index_html+="</tr>";
-  }
-  index_html+="</table>";
-  index_html+="</div>";
-  index_html+=R"rawliteral(<div>
-        <button class="button" onclick="updateWiFi()">Scan</button>
-        <button class="button">Connect</button>
+  }*/
+  index_html+=R"rawliteral(
+    <button class="button" onclick="updateWiFi()">Scan</button>
+      </table>
+      </div>
+      <div class="dht-sensor" id="dht">
+        <div id="temperature">Temperature: 0 C</div>
+        <div id="humidity">Humidity: 0 %</div>
       </div>
       <div class="add">
         <div class="add-inside">
