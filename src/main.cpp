@@ -52,6 +52,8 @@ int dBmtoPercentage(int dBm);
 
 File configFile;
 
+StaticJsonDocument<1024> configJson;        
+
 char ssid[]     = "TP-Kink";
 char password[] = "21371488";
 
@@ -178,24 +180,16 @@ void setup() {
 
   configFile = LittleFS.open("/config.json", "r");
 
-  StaticJsonDocument<256> configJson;
+  DeserializationError jsonErrs = deserializeJson(configJson, configFile);
 
-  DeserializationError jsonErrs;
-
-
-  if(!Json::parseFromStream(builder, configStream, &configJson, &jsonErrs))
+  if(jsonErrs)
   {
-    Serial.println("Error parsing config file");
-    Serial.println(jsonErrs.c_str());
+    Serial.println("Error: JSON deserialization failed!" + String(jsonErrs.c_str()));
   }
-  Serial.println(configJson["wifi"].asCString());
 
-  Serial.print(configJson.asCString());
-
-  delay(5600);
   for(unsigned short int i = 0; i < configJson["wifi"].size(); i++)
   {
-    //Serial.println(String("Trying: ") + configJson["wifi"][i]["ssid"].asString());
+    Serial.println(String("Trying: ") + String(configJson["wifi"][i]["ssid"]));
 
     WiFi.begin(ssid, password);
 
@@ -225,7 +219,7 @@ void setup() {
     Serial.println(WiFi.channel());
   }
  
-  //GMT = configJson["system"]["timezone"].asInt();
+  GMT = configJson["system"]["timezone"];
 
   //WiFi.begin(ssid, password);  
 
