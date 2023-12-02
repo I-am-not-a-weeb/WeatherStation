@@ -9,7 +9,7 @@
 #endif 
 
 #define RSSI_MAX -50        // define maximum strength of signal in dBm
-#define RSSI_MIN -100      // define minimum strength of signal in dBm
+#define RSSI_MIN -100       // define minimum strength of signal in dBm
 
 struct WiFi_scan_result{
   int8_t RSSI;

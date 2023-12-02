@@ -29,7 +29,9 @@
 
 #include <ArduinoJson.h>
 
+#include <AsyncMqttClient.hpp>
 
+#include <Ticker.h>
 //=======================================================================
 //                           Declarations  
 //=======================================================================
@@ -44,7 +46,6 @@ int dBmtoPercentage(int dBm);
 //                         Global Variables
 //=======================================================================
 
-
 #define dSecond 1000
 #define dMinute 1000*60
 #define dHour 1000*60*60
@@ -53,9 +54,6 @@ int dBmtoPercentage(int dBm);
 File configFile;
 
 StaticJsonDocument<1024> configJson;        
-
-char ssid[]     = "TP-Kink";
-char password[] = "21371488";
 
 AsyncWebServer server(80);       
 //ESP8266WebServer server(80);
@@ -70,6 +68,7 @@ std::vector<WiFi_scan_result> scanned_Wifis;
 
 unsigned long serialInterval = 0;
 unsigned long DHT22Interval = 0;
+unsigned long mqqtInterval = 0;
 
 MQ135 gasSensor(A0);
 
@@ -90,6 +89,11 @@ volatile int fanRPM = 0;
 
 volatile int fanReadings[5] = {0,0,0,0,0};
 
+AsyncMqttClient mqttClient;
+Ticker mqttReconnectTimer;
+
+#define MQTT_HOST IPAddress(192, 168, 1, 4)
+#define MQTT_PORT 1883
 //=======================================================================
 //                            Interrupts     
 //=======================================================================
@@ -166,6 +170,7 @@ void printSerial()
   printLux();
   Serial.println();
 }
+
 //=======================================================================
 //                              Setup         
 //=======================================================================
@@ -191,7 +196,7 @@ void setup() {
   {
     Serial.println(String("Trying: ") + String(configJson["wifi"][i]["ssid"]));
 
-    WiFi.begin(ssid, password);
+    WiFi.begin(String(configJson["wifi"][i]["ssid"]), String(configJson["wifi"][i]["password"]));
 
     for(unsigned short int j = 0; j < 6 && (WiFi.status() != WL_CONNECTED); j++)
     {
@@ -233,7 +238,6 @@ void setup() {
   Serial.println(WiFi.softAPIP());
   Serial.println(WiFi.softAPmacAddress());
 
-
   timeClient.setTimeOffset(3600*GMT);
 
   timeClient.begin();
@@ -257,12 +261,10 @@ void setup() {
 
   Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
 
-
   /*digitalWrite(D1,LOW);
   digitalWrite(D2,LOW);
   digitalWrite(D3,LOW);
   digitalWrite(D4,LOW);*/
-
 
   Wire.begin(D6,D5);            // (SDA,SCL)
 
@@ -271,59 +273,19 @@ void setup() {
     Serial.println(F("Error initialising BH1750"));
   }
 
-  /*
-  server.on("/", HTTP_GET, []() {
-    server.send(200, "text/html", handleIndex());
-  });
-  //*/
-
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/html", handleIndex());
-  });
-
-  server.on("/updateWifi",[](AsyncWebServerRequest *request){
-    updateScannedWiFis(scanned_Wifis,WiFi);
-
-    String index_html;
-    index_html.reserve(1024);
-
-    index_html+="<table>";
-    index_html+="<tr class=\"item\"><td>SSID</td><td>Signal</td><td>Encryption</td></tr>";
-
-    for(std::vector<WiFi_scan_result>::iterator i = scanned_Wifis.begin(); i != scanned_Wifis.end(); i++)
-    {
-      index_html+="<tr class=\"item\">";
-
-      index_html+=!(i->SSID[0] == '\0' || i->SSID[0] == '0') ? "<td>" : "<td class=\"hidden\">"; 
-      index_html+=!(i->SSID[0] == '\0' || i->SSID[0] == '0') ? i->SSID : "SSID Hidden";
-
-      //index_html+="<td>";
-      //index_html+= i->SSID;
-
-      index_html+="</td>";
-
-      index_html+="<td>";
-      index_html+=dBmtoPercentage(i->RSSI);
-      index_html+="\%";
-      index_html+="\n";
-      index_html+="</td>";
-
-      index_html+="<td>";
-      index_html+=i->encryptionType;
-      index_html+="</td>";
-
-      index_html+="</tr>";
-    }
-    index_html+="<button class=\"button\" onclick=\"updateWiFi()\">Scan</button>";
-    index_html+="</table>";
-    
-
-    request->send(200, "text/plane",index_html);
-  });
-
   timeClient.update();
 
+  server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "application/json","{\"temp\": \""
+      + String(temp) + "\", \"humi\": \""+String(humi)
+      +"\", \"ppm\": \""+String(air_quality)+"\", \"lux\": \""
+      +String(lux)+"\", \"rpm\": \"" + String(fanRPM)+"\"}");
+  });
+
   server.begin();
+  
+  mqttClient.setServer(MQTT_HOST, MQTT_PORT);
+  mqttClient.connect();
 }
 
 //=======================================================================
@@ -333,14 +295,7 @@ void setup() {
 
 void loop() {
 
-  //server.handleClient();
- 
-
-  if(millis()-DHT22Interval<2000)
-  {
-    
-  }
-  else
+  if(millis()-DHT22Interval>2000)
   {
     serialUpdate();
     updateTempHumi();
@@ -349,16 +304,23 @@ void loop() {
     DHT22Interval = millis();
   }
 
-  if(millis()-serialInterval<5000)
-  {
-    
-  }
-  else
+  if(millis()-serialInterval>5000)
   {
     printSerial();
     serialInterval = millis();
   }
+
+  if(millis()-mqqtInterval>30000)
+  {
+    //mqttClient.publish();
+    mqqtInterval = millis();
+  }
+
 }
+
+//=======================================================================
+//                          Definitions  
+//=======================================================================
 
 void serialEvent() 
 {
@@ -370,18 +332,11 @@ void serialEvent()
     }
 }
 
-
-//=======================================================================
-//                          Definitions  
-//=======================================================================
-
-
-
 //=======================================================================
 //                          HTML Pages 
 //=======================================================================
 
-String handleIndex()
+/*String handleIndex()
 {
   String index_html;
   index_html.reserve(1024);
@@ -395,7 +350,7 @@ String handleIndex()
       .hidden{ background-color: #CD5C5C }
       .button2 {background-color: #77878A;}
       body{align-items:center;}
-      .grid-addons{display: grid;grid-template-columns: repeat(auto-fill, 20em);grid-gap: 1rem;justify-content: space-between; /* 4 */}
+      .grid-addons{display: grid;grid-template-columns: repeat(auto-fill, 20em);grid-gap: 1rem;justify-content: space-between;  4 }
       .WIFI{background-color: #FFA07A; width:100%; height:100%;  border-style: solid; border-color: black; font-size:10px;}
     </style>
     <script>
@@ -441,7 +396,7 @@ String handleIndex()
     index_html+="</td>";
 
     index_html+="</tr>";
-  }*/
+  }
   index_html+=R"rawliteral(
     <button class="button" onclick="updateWiFi()">Scan</button>
       </table>
@@ -457,4 +412,4 @@ String handleIndex()
       </div>)rawliteral";
   return index_html;
 }
-
+*/
