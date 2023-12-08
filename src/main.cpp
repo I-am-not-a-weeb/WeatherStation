@@ -198,7 +198,7 @@ void setup() {
 
     WiFi.begin(String(configJson["wifi"][i]["ssid"]), String(configJson["wifi"][i]["password"]));
 
-    for(unsigned short int j = 0; j < 6 && (WiFi.status() != WL_CONNECTED); j++)
+    for(unsigned short int j = 0; j < 10 && (WiFi.status() != WL_CONNECTED); j++)
     {
       delay ( 1000 );
       Serial.print ( "." );
