@@ -29,7 +29,7 @@
 
 #include <ArduinoJson.h>
 
-#include <AsyncMqttClient.hpp>
+#include <AsyncMqttClient.h>
 
 #include <Ticker.h>
 //=======================================================================
@@ -91,6 +91,9 @@ volatile int fanReadings[5] = {0,0,0,0,0};
 
 AsyncMqttClient mqttClient;
 Ticker mqttReconnectTimer;
+
+WiFiEventHandler wifiConnectHandler;
+WiFiEventHandler wifiDisconnectHandler;
 
 #define MQTT_HOST IPAddress(192, 168, 1, 4)
 #define MQTT_PORT 1883
@@ -171,12 +174,30 @@ void printSerial()
   Serial.println();
 }
 
+void onWifiConnect(const WiFiEventStationModeGotIP& event) {
+  Serial.println("Connected to Wi-Fi.");
+  mqttClient.connect();
+}
+
+void onWifiDisconnect(const WiFiEventStationModeDisconnected& event) {
+  Serial.println("Disconnected from Wi-Fi.");
+  mqttReconnectTimer.detach(); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
+}
+
+void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
+  Serial.println("Disconnected from MQTT.");
+
+  if (WiFi.isConnected()) {
+    mqttReconnectTimer.once(2, [](){mqttClient.connect();});
+  }
+}
+
 //=======================================================================
 //                              Setup         
 //=======================================================================
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(74880);
 
   if(!LittleFS.begin())
   {
@@ -192,9 +213,38 @@ void setup() {
     Serial.println("Error: JSON deserialization failed!" + String(jsonErrs.c_str()));
   }
 
+  Serial.println("Initializing MQTT.");
+
+  wifiConnectHandler = WiFi.onStationModeGotIP(onWifiConnect);
+
+  mqttClient.setServer(MQTT_HOST, MQTT_PORT);
+
+  mqttClient.setClientId("GrowBox-Sender2");
+
+  mqttClient.setKeepAlive(5000);
+
+  mqttClient.setCleanSession(true);
+
+
+  mqttClient.onConnect([](bool sessionPresent) 
+    {
+      Serial.println("Connected to MQTT.");
+      mqttClient.subscribe("/update",2);
+    });
+
+  mqttClient.onPublish([](uint16_t packetId) 
+    {
+      Serial.println(packetId);
+    });
+  
+  Serial.println("MQTT server set:");
+  Serial.println("MQTT_HOST: "+ MQTT_HOST.toString());
+
+  mqttClient.connect();
+
   for(unsigned short int i = 0; i < configJson["wifi"].size(); i++)
   {
-    Serial.println(String("Trying: ") + String(configJson["wifi"][i]["ssid"]));
+    Serial.println(String("\nTrying: ") + String(configJson["wifi"][i]["ssid"]));
 
     WiFi.begin(String(configJson["wifi"][i]["ssid"]), String(configJson["wifi"][i]["password"]));
 
@@ -215,7 +265,6 @@ void setup() {
   }
   else
   {
-    Serial.println("Connected");
     Serial.println(WiFi.localIP());
     Serial.println(WiFi.macAddress());
     Serial.println(WiFi.SSID());  
@@ -224,6 +273,8 @@ void setup() {
     Serial.println(WiFi.channel());
   }
  
+  wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
+
   GMT = configJson["system"]["timezone"];
 
   //WiFi.begin(ssid, password);  
@@ -281,11 +332,9 @@ void setup() {
       +"\", \"ppm\": \""+String(air_quality)+"\", \"lux\": \""
       +String(lux)+"\", \"rpm\": \"" + String(fanRPM)+"\"}");
   });
-
-  server.begin();
   
-  mqttClient.setServer(MQTT_HOST, MQTT_PORT);
-  mqttClient.connect();
+  server.begin();
+  Serial.println("MQTT server connection status: " + String(mqttClient.connected()));
 }
 
 //=======================================================================
@@ -310,12 +359,31 @@ void loop() {
     serialInterval = millis();
   }
 
-  if(millis()-mqqtInterval>30000)
+  if(millis()-mqqtInterval>10000)
   {
-    //mqttClient.publish();
+    if(mqttClient.connected())
+    {
+      //Serial.println("Trying to send data to server.");
+
+      String tmp {"{\"temp\": \""
+      + String(temp) + "\", \"humi\": \""+String(humi)
+      +"\", \"ppm\": \""+String(air_quality)+"\", \"lux\": \""
+      +String(lux)+"\", \"rpm\": \"" + String(fanRPM)+"\"}"};
+
+    yield();
+
+    mqttClient.publish("server/update",2,true,tmp.c_str(), tmp.length()+1, false);
+    }
+    else
+    {
+      mqttClient.disconnect();
+
+      Serial.println("MQTT server connection status: " + String(mqttClient.connected()));
+      mqttClient.connect();
+    }
+    
     mqqtInterval = millis();
   }
-
 }
 
 //=======================================================================
@@ -331,85 +399,3 @@ void serialEvent()
     Serial.println(incomingString.toInt());
     }
 }
-
-//=======================================================================
-//                          HTML Pages 
-//=======================================================================
-
-/*String handleIndex()
-{
-  String index_html;
-  index_html.reserve(1024);
-  index_html = R"rawliteral(<!DOCTYPE html><html></html>
-  <head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-    <link rel=\"icon\" href=\"data:,\">
-    <style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}
-      .button { background-color: #195B6A; border: none; color: white; padding: 16px 40px;
-      text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}
-      table{ padding: 20px; width:100%; height:100%;}
-      .hidden{ background-color: #CD5C5C }
-      .button2 {background-color: #77878A;}
-      body{align-items:center;}
-      .grid-addons{display: grid;grid-template-columns: repeat(auto-fill, 20em);grid-gap: 1rem;justify-content: space-between;  4 }
-      .WIFI{background-color: #FFA07A; width:100%; height:100%;  border-style: solid; border-color: black; font-size:10px;}
-    </style>
-    <script>
-      function updateWiFi()
-      {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200)
-        {
-            document.getElementById("WIFI").innerHTML = this.responseText;
-        }
-      }
-      document.getElementById("WIFI").innerHTML = "Updating...";
-      xhttp.open("GET", "updateWifi", true);
-      xhttp.send()
-      }
-    </script>
-    </head>
-    <body><h1>ESP8266 Web Server</h1>; 
-      <div class="grid-addons">
-      <div class="WIFI" id="WIFI">             
-        <table>
-          <tr class="item"><td>SSID</td><td>Signal</td><td>Encryption</td></tr>
-          Refresh
-          )rawliteral";
-
-  /*for(std::vector<WiFi_scan_result>::iterator i = scanned_Wifis.begin(); i != scanned_Wifis.end(); i++)
-  {
-    index_html+="<tr class=\"item\">";
-            
-    index_html+=!(i->SSID[0] == '\0' || i->SSID[0] == '0') ? "<td>" : "<td class=\"hidden\">"; 
-    index_html+=!(i->SSID[0] == '\0' || i->SSID[0] == '0') ? i->SSID : "SSID Hidden";
-    index_html+="</td>";
-
-    index_html+="<td>";
-    index_html+=dBmtoPercentage(i->RSSI);
-    index_html+="\%";
-    index_html+="\n";
-    index_html+="</td>";
-
-    index_html+="<td>";
-    index_html+=i->encryptionType;
-    index_html+="</td>";
-
-    index_html+="</tr>";
-  }
-  index_html+=R"rawliteral(
-    <button class="button" onclick="updateWiFi()">Scan</button>
-      </table>
-      </div>
-      <div class="dht-sensor" id="dht">
-        <div id="temperature">Temperature: 0 C</div>
-        <div id="humidity">Humidity: 0 %</div>
-      </div>
-      <div class="add">
-        <div class="add-inside">
-          &plus;
-        </div>
-      </div>)rawliteral";
-  return index_html;
-}
-*/
