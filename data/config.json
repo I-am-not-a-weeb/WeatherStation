@@ -18,6 +18,12 @@
     {
         "timezone": 1
     },
+    "timers":
+    {
+        "serial_timer": 5000,
+        "dht22_timer":  2000,
+        "mqtt_timer":  10000
+    },
     "GPIOs":
     {
         "A0":{},
