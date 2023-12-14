@@ -1,0 +1,458 @@
+
+ ets Jan  8 2013,rst cause:2, boot mode:(3,6)
+
+load 0x4010f000, len 3424, room 16 
+tail 0
+chksum 0x2e
+load 0x3fff20b8, len 40, room 8 
+tail 0
+chksum 0x2b
+csum 0x2b
+v00080940
+~ld
+rf cal sector: 252
+freq trace enable 0
+rf[112] : 0�Initializing MQTT.
+MQTT server set:
+MQTT_HOST: 192.168.1.4
+
+Trying: TP-Kink
+..Disconnected from Wi-Fi.
+...Disconnected from Wi-Fi.
+...Disconnected from Wi-Fi.
+..
+Trying: NETIASPOT-2.4GHz-723300
+...Connected to Wi-Fi.
+.192.168.1.10
+08:3A:8D:DE:DC:F3
+NETIASPOT-2.4GHz-723300
+-51
+20:83:F8:72:33:04
+11
+AP started
+192.168.4.1
+0A:3A:8D:DE:DC:F3
+Starting ITimer OK, millis() = 15921
+1
+2
+3
+4
+
+--------------- CUT HERE FOR EXCEPTION DECODER ---------------
+
+Exception (29):
+epc1=0x4000df64 epc2=0x00000000 epc3=0x00000000 excvaddr=0x00000000 depc=0x00000000
+
+StoreProhibited: A store referenced a page mapped with an attribute that does not permit stores
+
+>>>stack>>>
+
+ctx: sys
+sp: 3fffec60 end: 3fffffb0 offset: 0150
+3fffedb0:  40249cd7 3fff0b24 00000005 40249c6c  
+3fffedc0:  00000002 40249c13 00000002 40248d68  
+3fffedd0:  40248d91 3fffee80 3ffee7c0 00000016  
+3fffede0:  402467f4 3fffee80 3ffee668 3ffee06c  
+3fffedf0:  3ffeb234 3fffee80 3fffee80 40100631  
+3fffee00:  4954454e 4f505341 2e322d54 7a484734  
+3fffee10:  3332372d 00303033 00000000 00000001  
+3fffee20:  40242b51 00000080 4000050c 00000022  
+3fffee30:  ffffffdd 3ffee17c 3ffeb244 3ffee7c0  
+3fffee40:  3ffed698 0000003d 00000000 402474eb  
+3fffee50:  00000000 3fff0b24 ffffffdd 00000000  
+3fffee60:  00000000 3ffee7c0 00000010 ffffffff  
+3fffee70:  40000f58 00000000 00000020 00000000  
+3fffee80:  00000000 00110b0b 00640104 00000056  
+3fffee90:  3ffeb258 000000d8 3ffeb27e 3ffeb24c  
+3fffeea0:  00000000 3ffeb258 3ffeb271 3ffeb287  
+3fffeeb0:  00000000 00000000 3ffeb28d 3ffeb316  
+3fffeec0:  3ffeb2ae 3ffeb2ca 00000000 3ffeb2ec  
+3fffeed0:  00000000 00000000 0000003d 00000000  
+3fffeee0:  3fff0dcc 40246f5e 3ffed698 3fff0b24  
+3fffeef0:  00000000 3ffee7c0 3ffed698 3ffeb234  
+3fffef00:  3ffeb234 00000100 00000000 0000003d  
+3fffef10:  00000000 3ffeb23e 4025a637 3ffed698  
+3fffef20:  3ffeb228 3fffdcc0 3ffe9d68 3ffe9d68  
+3fffef30:  00000080 3ffed698 00000000 3fffdcb0  
+3fffef40:  40259efb 3fffdab0 00000000 40223421  
+3fffef50:  3ffe9d68 40000f49 ffffff01 40000f49  
+3fffef60:  40000e19 00080934 bff00000 0000bfff  
+3fffef70:  00000005 aa55aa55 000000ed 40106575  
+3fffef80:  4010657b bff00000 0000bfff 401018dc  
+3fffef90:  4010000d 206f6f54 6772614c 401000ab  
+3fffefa0:  4024ee60 3fffef3c 4024ee11 3ffffb78  
+3fffefb0:  3fffffc0 00000000 00000000 feefeffe  
+3fffefc0:  feefeffe feefeffe feefeffe feefeffe  
+3fffefd0:  feefeffe feefeffe feefeffe feefeffe  
+3fffefe0:  feefeffe feefeffe feefeffe feefeffe  
+3fffeff0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff000:  feefeffe feefeffe feefeffe feefeffe  
+3ffff010:  feefeffe feefeffe feefeffe feefeffe  
+3ffff020:  feefeffe feefeffe feefeffe feefeffe  
+3ffff030:  feefeffe feefeffe feefeffe feefeffe  
+3ffff040:  feefeffe feefeffe feefeffe feefeffe  
+3ffff050:  feefeffe feefeffe feefeffe feefeffe  
+3ffff060:  feefeffe feefeffe feefeffe feefeffe  
+3ffff070:  feefeffe feefeffe feefeffe feefeffe  
+3ffff080:  feefeffe feefeffe feefeffe feefeffe  
+3ffff090:  feefeffe feefeffe feefeffe feefeffe  
+3ffff0a0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff0b0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff0c0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff0d0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff0e0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff0f0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff100:  feefeffe feefeffe feefeffe feefeffe  
+3ffff110:  feefeffe feefeffe feefeffe feefeffe  
+3ffff120:  feefeffe feefeffe feefeffe feefeffe  
+3ffff130:  feefeffe feefeffe feefeffe feefeffe  
+3ffff140:  feefeffe feefeffe feefeffe feefeffe  
+3ffff150:  feefeffe feefeffe feefeffe feefeffe  
+3ffff160:  feefeffe feefeffe feefeffe feefeffe  
+3ffff170:  feefeffe feefeffe feefeffe feefeffe  
+3ffff180:  feefeffe feefeffe feefeffe feefeffe  
+3ffff190:  feefeffe feefeffe feefeffe feefeffe  
+3ffff1a0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff1b0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff1c0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff1d0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff1e0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff1f0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff200:  feefeffe feefeffe feefeffe feefeffe  
+3ffff210:  feefeffe feefeffe feefeffe feefeffe  
+3ffff220:  feefeffe feefeffe feefeffe feefeffe  
+3ffff230:  feefeffe feefeffe feefeffe feefeffe  
+3ffff240:  feefeffe feefeffe feefeffe feefeffe  
+3ffff250:  feefeffe feefeffe feefeffe feefeffe  
+3ffff260:  feefeffe feefeffe feefeffe feefeffe  
+3ffff270:  feefeffe feefeffe feefeffe feefeffe  
+3ffff280:  feefeffe feefeffe feefeffe feefeffe  
+3ffff290:  feefeffe feefeffe feefeffe feefeffe  
+3ffff2a0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff2b0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff2c0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff2d0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff2e0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff2f0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff300:  feefeffe feefeffe feefeffe feefeffe  
+3ffff310:  feefeffe feefeffe feefeffe feefeffe  
+3ffff320:  feefeffe feefeffe feefeffe feefeffe  
+3ffff330:  feefeffe feefeffe feefeffe feefeffe  
+3ffff340:  feefeffe feefeffe feefeffe feefeffe  
+3ffff350:  feefeffe feefeffe feefeffe feefeffe  
+3ffff360:  feefeffe feefeffe feefeffe feefeffe  
+3ffff370:  feefeffe feefeffe feefeffe feefeffe  
+3ffff380:  feefeffe feefeffe feefeffe feefeffe  
+3ffff390:  feefeffe feefeffe feefeffe feefeffe  
+3ffff3a0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff3b0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff3c0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff3d0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff3e0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff3f0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff400:  feefeffe feefeffe feefeffe feefeffe  
+3ffff410:  feefeffe feefeffe feefeffe feefeffe  
+3ffff420:  feefeffe feefeffe feefeffe feefeffe  
+3ffff430:  feefeffe feefeffe feefeffe feefeffe  
+3ffff440:  feefeffe feefeffe feefeffe feefeffe  
+3ffff450:  feefeffe feefeffe feefeffe feefeffe  
+3ffff460:  feefeffe feefeffe feefeffe feefeffe  
+3ffff470:  feefeffe feefeffe feefeffe feefeffe  
+3ffff480:  feefeffe feefeffe feefeffe feefeffe  
+3ffff490:  feefeffe feefeffe feefeffe feefeffe  
+3ffff4a0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff4b0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff4c0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff4d0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff4e0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff4f0:  feefeffe feefeffe feefeffe feefeffe  
+3ffff500:  feefeffe feefeffe feefeffe feefeffe  
+3ffff510:  feefeffe feefeffe feefeffe feefeffe  
+3ffff520:  3ffe9cd5 40106473 3ffed698 feefeffe  
+3ffff530:  40103d67 3ffed698 feefeffe feefeffe  
+3ffff540:  00000019 00ed7cc1 3ffee06c 40103f44  
+3ffff550:  3ffea55c 00000000 00000000 feefeffe  
+3ffff560:  00000019 00ed7cc1 401043fe 00000100  
+3ffff570:  3ffea55c 7fffffff 00002200 00000001  
+3ffff580:  00000001 00000080 feefeffe feefeffe  
+3ffff590:  3ffea55c feefeffe feefeffe 00ed7cc1  
+3ffff5a0:  3ffea3b8 2c9f0300 4000050c 3fffc278  
+3ffff5b0:  40104120 3fffc200 00000022 feefeffe  
+3ffff5c0:  4000b570 00000030 0000001b ffffffff  
+3ffff5d0:  00000000 00000000 00000000 00000000  
+3ffff5e0:  00000000 00000000 00000000 00000000  
+3ffff5f0:  00000000 00000000 00000000 00000000  
+3ffff600:  00000000 00000000 00000000 00000000  
+3ffff610:  b7f00f34 fb4c3ca9 56dd62d8 22901249  
+3ffff620:  1b193967 cb21d09b 5ff79fee 92cdd747  
+3ffff630:  96f2add8 bc1daa38 9ed888f5 d7a5a29c  
+3ffff640:  4000b5f9 00000008 00000038 3ffff720  
+3ffff650:  00000008 3ffff720 dff3b3a3 4f254dbf  
+3ffff660:  490ea423 a48750b1 ceeb03d2 0f3f8603  
+3ffff670:  17b65d32 53910f86 0fbb0656 0027a811  
+3ffff680:  bf751ad5 b9e0ce07 c0e5a9a3 86c41ecf  
+3ffff690:  7555c697 022eceaf 4c9aaca4 cad4cb92  
+3ffff6a0:  a1433158 8ecf8730 243a95cf a2811905  
+3ffff6b0:  63b08fc5 a131e61d cf6465a1 be9d9dab  
+3ffff6c0:  5fadaf14 1de51dc9 34f99391 485e7511  
+3ffff6d0:  4000b62e f29fa5bc edbe1df7 bef52df8  
+3ffff6e0:  4000b6c4 3ffff720 3ffff8b0 ffffffff  
+3ffff6f0:  4000b72e 3ffff700 00000008 e75eac68  
+3ffff700:  00000000 00000000 4000a333 3ffff828  
+3ffff710:  3ffff8b0 3ffff808 3fff203c db6a945b  
+3ffff720:  00000000 00000000 00000000 00000000  
+3ffff730:  00000000 00000000 00000000 00000000  
+3ffff740:  00000000 00000000 00000000 00000000  
+3ffff750:  00000000 00000000 00000000 00000000  
+3ffff760:  00000000 00000000 00000000 00000000  
+3ffff770:  00000000 00000000 00000000 3ffff800  
+3ffff780:  4000ba18 3ffff800 00000003 00000020  
+3ffff790:  00000002 00000000 00000020 40100848  
+3ffff7a0:  4010360d 00000000 00000002 401031dc  
+3ffff7b0:  3ffe9cd2 4010645b 3ffed440 00000000  
+3ffff7c0:  00000001 40105636 3ffede98 18bd5585  
+3ffff7d0:  40105aa7 3be8a041 6f08b83c e791fd3c  
+3ffff7e0:  5c5c5c5c 5c5c5c5c 4025b053 00000001  
+3ffff7f0:  ffffffff 00000000 3ffe9e21 00000008  
+3ffff800:  4025b0a2 3ffed440 3fff0b24 00000001  
+3ffff810:  00000002 00000000 00000020 40100848  
+3ffff820:  00000005 00000005 00000002 401031dc  
+3ffff830:  3ffe9cd2 4025a15f 3ffed440 3fff264c  
+3ffff840:  00000000 40243777 3ffee7c0 3fff0b24  
+3ffff850:  00000000 00000002 00000001 3ffed440  
+3ffff860:  3fff2682 40106ab7 3fff1a68 3fff052c  
+3ffff870:  3fff0dcc 0000f000 40264900 000000de  
+3ffff880:  00000000 40234919 3fff1a68 3fff052c  
+3ffff890:  3fff0544 00000020 00000060 40101935  
+3ffff8a0:  00000014 0000001c 00000032 3fff0544  
+3ffff8b0:  3fff0544 3fff264c 3fff264c 40234b47  
+3ffff8c0:  3fff057c 3fff264c 00000006 40234fa6  
+3ffff8d0:  3ffe96bb 3fff205c 3ffff910 4024af42  
+3ffff8e0:  00000005 00000000 00000020 40100848  
+3ffff8f0:  3fff0544 3fff264c 00000005 401031dc  
+3ffff900:  3ffe9cd5 40106473 3ffed698 00000008  
+3ffff910:  40103d67 3ffed698 3fff0b24 00000001  
+3ffff920:  00000019 018e6ba7 3ffee06c 40103f44  
+3ffff930:  3ffea574 00000000 00000000 401031dc  
+3ffff940:  00000019 018e6ba7 401043fe 00000100  
+3ffff950:  3ffea574 7fffffff 00000000 00000001  
+3ffff960:  00000001 00000080 00000001 3ffed468  
+3ffff970:  3ffea574 40106ab7 3fff1a4c 018e6ba7  
+3ffff980:  3ffea580 2c9f0300 4000050c 3fffc278  
+3ffff990:  40104120 3fffc200 00000022 3fff052c  
+3ffff9a0:  4023c5fa 00000030 0000000f ffffffff  
+3ffff9b0:  4023c570 3fff088c 0101a8c0 00000001  
+3ffff9c0:  3fff0888 0401a8c0 00000030 00000080  
+3ffff9d0:  00000000 0a01a8c0 00000000 3fff0544  
+3ffff9e0:  3fffabf0 3fffacac 3fffacac 00000030  
+3ffff9f0:  3fff0544 3fff2824 3fffc230 3fff057c  
+3ffffa00:  0000038c 00000020 3ffe8608 401015a1  
+3ffffa10:  3fff0544 00000020 3fff264c 3fff264c  
+3ffffa20:  3fff0544 00000020 3fff264c 401018fe  
+3ffffa30:  4000050c 3fff088c 00000000 401011b8  
+3ffffa40:  00000000 3fff088c 00000000 4023587c  
+3ffffa50:  3fff8490 00000001 00000006 40235909  
+3ffffa60:  3fff0544 3fff088c 00000000 4023c484  
+3ffffa70:  00000000 00000000 00000001 00000000  
+3ffffa80:  3fff3dac 3fff0544 3fff3ee4 3fffbf0c  
+3ffffa90:  3fffbf0c 3fffbe50 3fff0544 4023c634  
+3ffffaa0:  40100000 007b8818 3fff0040 00000000  
+3ffffab0:  3fffbf50 3fff0544 3fffbe50 4023df88  
+3ffffac0:  00000011 3fff098c 00002710 402234a0  
+3ffffad0:  00000014 3fffbe4c 000000ff 00000000  
+3ffffae0:  00000006 3fff098c 3fff2704 00000000  
+3ffffaf0:  00000011 00000020 00000010 3fffbf84  
+3ffffb00:  3fff0544 3fffbe4c 00000000 4023dff0  
+3ffffb10:  3fff0544 00000000 00000000 40235855  
+3ffffb20:  007a1200 00000008 0000005a 4023e016  
+3ffffb30:  3fff0544 00000000 00000000 4023ef4f  
+3ffffb40:  007a1200 3ffffbe0 00000040 40239ca2  
+3ffffb50:  3fff0544 00001fc7 00000000 40235855  
+3ffffb60:  40106e51 0083854f 3fff0040 00000000  
+3ffffb70:  3ffeeea0 3fff0040 00000064 00006b7e  
+3ffffb80:  00000064 00000064 40223494 3fffefa0  
+3ffffb90:  00006b7e 00000064 00000064 4022359a  
+3ffffba0:  00000064 00006b7e 00000000 402237cd  
+3ffffbb0:  00000064 00000064 3ffef5c4 40226eb0  
+3ffffbc0:  00000064 0401a8c0 3ffe9298 40221831  
+3ffffbd0:  00000000 f7ced916 00006b7e 3fff006c  
+3ffffbe0:  3ffffd10 00006b7e 00000064 40224914  
+3ffffbf0:  3ffffd10 3ffefd4c 3ffffd94 4020e215  
+3ffffc00:  00000064 feefeffe feefeffe feefeffe  
+3ffffc10:  3ffef90c 0000000c 00000000 feefeffe  
+3ffffc20:  feefeffe feefeffe 3ffef90c 0000000c  
+3ffffc30:  00000000 feefeffe feefeffe feefeffe  
+3ffffc40:  3ffef90c 0000000c 00000000 3ffef90c  
+3ffffc50:  0000000c 00000000 3ffef90c 0000000c  
+3ffffc60:  00000000 3ffef8f4 00000017 00000000  
+3ffffc70:  feefeffe feefeffe feefeffe 3ffef8f4  
+3ffffc80:  00000017 00000000 feefeffe feefeffe  
+3ffffc90:  feefeffe 3ffef8f4 00000017 00000000  
+3ffffca0:  3ffef8f4 00000017 00000000 3ffef8f4  
+3ffffcb0:  00000017 00000000 3ffef8f4 00000017  
+3ffffcc0:  00000000 feefeffe feefeffe feefeffe  
+3ffffcd0:  3ffef8f4 00000017 00000000 feefeffe  
+3ffffce0:  feefeffe feefeffe 3ffef8f4 00000017  
+3ffffcf0:  00000000 3ffef8f4 00000017 00000000  
+3ffffd00:  3ffef8f4 00000017 00000000 00000000  
+3ffffd10:  00000000 00000000 00000000 00000000  
+3ffffd20:  00000000 00000000 00000000 3ffef8a8  
+3ffffd30:  3ffe8a18 3ffef8a8 3ffe8ad8 feefeffe  
+3ffffd40:  3ffef8a8 3ffe8ad8 00000001 3ffef8a8  
+3ffffd50:  3ffe8ad8 feefeffe 3ffef8a8 3ffe8ad8  
+3ffffd60:  00000001 3ffef8a8 3ffe8ad8 feefeffe  
+3ffffd70:  3ffef8a8 3ffe8ad8 00000001 feefeffe  
+3ffffd80:  feefeffe feefeffe feefeffe feefeffe  
+3ffffd90:  feefeffe feefeffe feefeffe 4022833c  
+3ffffda0:  402066ec 00000000 0011001f 00000000  
+3ffffdb0:  40229c70 0104a8c0 3ffef8a8 3ffe8a18  
+3ffffdc0:  feefeffe 3ffef8a8 3ffe8a18 3ffe8a20  
+3ffffdd0:  00000000 0011001f 00000000 00000000  
+3ffffde0:  0017001f 00000000 00000000 0011001f  
+3ffffdf0:  00000000 40229c70 0a01a8c0 3ffef8a8  
+3ffffe00:  3ffe8ad8 feefeffe 3ffef8a8 3ffe8ad8  
+3ffffe10:  00000001 feefeffe feefeffe 3ffef8a8  
+3ffffe20:  3ffe8ad8 00000001 3ffe89f4 00000000  
+3ffffe30:  000c000f 00000000 3ffef8a8 3ffe8ad8  
+3ffffe40:  feefeffe 3ffef8a8 3ffe8ad8 00000001  
+3ffffe50:  feefeffe feefeffe 3ffef8a8 3ffe8ad8  
+3ffffe60:  00000001 3ffe89ec 00000000 0017001f  
+3ffffe70:  00000000 3ffef8a8 3ffe8ad8 feefeffe  
+3ffffe80:  3ffef8a8 3ffe8ad8 00000001 feefeffe  
+3ffffe90:  feefeffe 3ffef8a8 3ffe8ad8 00000001  
+3ffffea0:  3ffe89ec 00000000 0017001f 00000000  
+3ffffeb0:  00000000 0020002f 00000000 00000000  
+3ffffec0:  0020002f 00000000 3ffef8a8 3ffe8ad8  
+3ffffed0:  40229c70 0401a8c0 00000000 0016001f  
+3ffffee0:  00000000 00000000 0016001f 00000000  
+3ffffef0:  feefeffe feefeffe 40228324 40206270  
+3fffff00:  feefeffe feefeffe 4022830c 40210a40  
+3fffff10:  feefeffe feefeffe 402282f4 4020637c  
+3fffff20:  40229c70 0401a8c0 4020620c feefeffe  
+3fffff30:  402282d4 402282c0 00000000 00000000  
+3fffff40:  402061e4 feefeffe 402282a0 4022828c  
+3fffff50:  00000000 00000000 feefeffe feefeffe  
+3fffff60:  feefeffe feefeffe feefeffe feefeffe  
+3fffff70:  3ffef90c 0000000c 00000000 40205c90  
+3fffff80:  00000000 00000000 00000000 4021ec38  
+3fffff90:  00000000 00000000 3ffefe78 feefeffe  
+3fffffa0:  3fffdad0 00000000 3fffdab0 40223613  
+<<<stack<<<
+
+0x40249cd7 in ieee80211_setup_ratetable at ??:?
+0x40249c6c in ieee80211_setup_ratetable at ??:?
+0x40249c13 in ieee80211_phy_init at ??:?
+0x40248d68 in cnx_update_bss_more at ??:?
+0x40248d91 in cnx_update_bss_more at ??:?
+0x402467f4 in scan_parse_beacon at ??:?
+0x40100631 in ISRTimer::run() at .pio\libdeps\d1_mini_lite\ESP8266TimerInterrupt\src/ESP8266_ISR_Timer-Impl.h:89
+0x40242b51 in ieee80211_parse_beacon at ??:?
+0x402474eb in sta_input at ??:?
+0x40246f5e in sta_input at ??:?
+0x4025a637 in pp_tx_idle_timeout at ??:?
+0x40259efb in ppPeocessRxPktHdr at ??:?
+0x40223421 in loop_task(ETSEventTag*) at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:273
+0x40106575 in call_user_start_local at ??:?
+0x4010657b in call_user_start_local at ??:?
+0x401018dc in umm_init at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266\umm_malloc/umm_malloc.cpp:569
+0x4010000d in call_user_start at ??:?
+0x401000ab in app_entry_redefinable at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:386
+0x4024ee60 in cont_ret at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/cont.S:142
+0x4024ee11 in cont_continue at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/cont.S:51
+0x40106473 in lmacRxDone at ??:?
+0x40103d67 in rcReachRetryLimit at ??:?
+0x40103f44 in rcReachRetryLimit at ??:?
+0x401043fe in wDev_ProcessFiq at ??:?
+0x40104120 in wDev_ProcessFiq at ??:?
+0x40100848 in ets_post at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:238
+0x4010360d in rcUpdateTxDone at ??:?
+0x401031dc in pp_post at ??:?
+0x4010645b in lmacTxFrame at ??:?
+0x40105636 in lmacRecycleMPDU at ??:?
+0x40105aa7 in lmacRecycleMPDU at ??:?
+0x4025b053 in pp_attach at ??:?
+0x4025b0a2 in pp_attach at ??:?
+0x40100848 in ets_post at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:238
+0x401031dc in pp_post at ??:?
+0x4025a15f in ppTxPkt at ??:?
+0x40243777 in ieee80211_output_pbuf at ??:?
+0x40106ab7 in wdt_feed at ??:?
+0x40264900 in etharp_output at ??:?
+0x40234919 in glue2esp_linkoutput at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/glue-esp/lwip-esp.c:301
+0x40101935 in malloc at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266\umm_malloc/umm_malloc.cpp:912
+0x40234b47 in new_linkoutput at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/glue-lwip/lwip-git.c:272
+0x40234fa6 in ethernet_output at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/netif/ethernet.c:312
+0x4024af42 in wpa_receive at ??:?
+0x40100848 in ets_post at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:238
+0x401031dc in pp_post at ??:?
+0x40106473 in lmacRxDone at ??:?
+0x40103d67 in rcReachRetryLimit at ??:?
+0x40103f44 in rcReachRetryLimit at ??:?
+0x401031dc in pp_post at ??:?
+0x401043fe in wDev_ProcessFiq at ??:?
+0x40106ab7 in wdt_feed at ??:?
+0x40104120 in wDev_ProcessFiq at ??:?
+0x4023c5fa in etharp_output_LWIP2 at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/etharp.c:792
+0x4023c570 in etharp_output_LWIP2 at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/etharp.c:806
+0x401015a1 in umm_free_core at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266\umm_malloc/umm_malloc.cpp:642
+0x401018fe in free at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266\umm_malloc/umm_malloc.cpp:688
+0x401011b8 in vPortFree at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/heap.cpp:388
+0x4023587c in mem_free at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/mem.c:237
+0x40235909 in memp_free at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/memp.c:447
+0x4023c484 in etharp_query at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/etharp.c:1067
+0x4023c634 in etharp_output_LWIP2 at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/etharp.c:890
+0x40100000 in _stext at ??:?
+0x4023df88 in ip4_output_if_opt_src at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/ip4.c:1765
+0x402234a0 in esp_suspend at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:130
+0x4023dff0 in ip4_output_if_opt at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/ip4.c:1577
+0x40235855 in mem_malloc at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/mem.c:210
+0x4023e016 in ip4_output_if at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/ip4.c:1550
+0x4023ef4f in ip_chksum_pseudo at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/inet_chksum.c:395
+0x40239ca2 in tcp_output at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/tcp_out.c:1362
+0x40235855 in mem_malloc at /local/users/gauchard/arduino/arduino_esp8266/origin/tools/sdk/lwip2/builder/lwip2-src/src/core/mem.c:210
+0x40106e51 in ets_timer_arm_new at ??:?
+0x40223494 in esp_get_cycle_count at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_features.h:64
+ (inlined by) EspClass::getCycleCount() at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/Esp.h:221
+ (inlined by) esp_suspend_within_cont at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:122
+ (inlined by) __esp_suspend at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:128
+0x4022359a in __esp_delay at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:161
+0x402237cd in esp_try_delay(unsigned int, unsigned int, unsigned int) at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:182 (discriminator 4)
+0x40226eb0 in AsyncClient::connect(IPAddress, unsigned short) at .pio\libdeps\d1_mini_lite\ESPAsyncTCP-esphome\src/ESPAsyncTCP.cpp:268
+0x40221831 in Print::write(char const*) at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/Print.h:59
+ (inlined by) Print::print(char const*) at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/Print.cpp:121
+0x40224914 in esp_delay<__delay(long unsigned int)::<lambda()> > at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/coredecls.h:69
+ (inlined by) esp_delay<__delay(long unsigned int)::<lambda()> > at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/coredecls.h:78
+ (inlined by) __delay at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_wiring.cpp:39
+0x4020e215 in setup at src/main.cpp:395
+0x4022833c in std::_Function_handler<void (AsyncWebServerRequest*), setup::{lambda(AsyncWebServerRequest*)#4}>::_M_manager(std::_Any_data&, std::_Function_handler<void (AsyncWebServerRequest*), setup::{lambda(AsyncWebServerRequest*)#4}> const&, std::_Manager_operation) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:271
+0x402066ec in std::_Function_handler<void (AsyncWebServerRequest*), setup::{lambda(AsyncWebServerRequest*)#4}>::_M_invoke(std::_Any_data const&, AsyncWebServerRequest*&&) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:289
+0x40229c70 in AsyncServer::setNoDelay(bool) at ??:?
+0x40229c70 in AsyncServer::setNoDelay(bool) at ??:?
+0x40229c70 in AsyncServer::setNoDelay(bool) at ??:?
+0x40228324 in std::_Function_handler<void (unsigned short), setup::{lambda(unsigned short)#3}>::_M_manager(std::_Any_data&, std::_Function_handler<void (unsigned short), setup::{lambda(unsigned short)#3}> const&, std::_Manager_operation) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:271
+0x40206270 in std::_Function_handler<void (unsigned short), setup::{lambda(unsigned short)#3}>::_M_invoke(std::_Any_data const&, unsigned short&&) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:289
+0x4022830c in std::_Function_handler<void (char*, char*, AsyncMqttClientMessageProperties, unsigned int, unsigned int, unsigned int), setup::{lambda(char*, char*, AsyncMqttClientMessageProperties, unsigned int, unsigned int, unsigned int)#2}>::_M_manager(std::_Any_data&, std::_Function_handler<void (char*, char*, AsyncMqttClientMessageProperties, unsigned int, unsigned int, unsigned int), setup::{lambda(char*, char*, AsyncMqttClientMessageProperties, unsigned int, unsigned int, unsigned int)#2}> const&, std::_Manager_operation) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:271
+0x40210a40 in std::_Function_handler<void (char*, char*, AsyncMqttClientMessageProperties, unsigned int, unsigned int, unsigned int), setup::{lambda(char*, char*, AsyncMqttClientMessageProperties, unsigned int, unsigned int, unsigned int)#2}>::_M_invoke(std::_Any_data const&, char*&&, std::_Any_data const&, AsyncMqttClientMessageProperties&&, unsigned int&&, AsyncMqttClientMessageProperties&&, AsyncMqttClientMessageProperties&&) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:289
+0x402282f4 in std::_Function_handler<void (bool), setup::{lambda(bool)#1}>::_M_manager(std::_Any_data&, std::_Function_handler<void (bool), setup::{lambda(bool)#1}> const&, std::_Manager_operation) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:271
+0x4020637c in std::_Function_handler<void (bool), setup::{lambda(bool)#1}>::_M_invoke(std::_Any_data const&, bool&&) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:289
+0x40229c70 in AsyncServer::setNoDelay(bool) at ??:?
+0x4020620c in onWifiDisconnect(WiFiEventStationModeDisconnected const&) at src/main.cpp:180
+0x402282d4 in std::_Function_handler<void (WiFiEventStationModeDisconnected const&), void (*)(WiFiEventStationModeDisconnected const&)>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:271
+0x402282c0 in std::_Function_handler<void (WiFiEventStationModeDisconnected const&), void (*)(WiFiEventStationModeDisconnected const&)>::_M_invoke(std::_Any_data const&, WiFiEventStationModeDisconnected const&) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:289
+0x402061e4 in onWifiConnect(WiFiEventStationModeGotIP const&) at src/main.cpp:175
+0x402282a0 in std::_Function_handler<void (WiFiEventStationModeGotIP const&), void (*)(WiFiEventStationModeGotIP const&)>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:271
+0x4022828c in std::_Function_handler<void (WiFiEventStationModeGotIP const&), void (*)(WiFiEventStationModeGotIP const&)>::_M_invoke(std::_Any_data const&, WiFiEventStationModeGotIP const&) at c:\users\i_am_not_a_weeb\.platformio\packages\toolchain-xtensa\xtensa-lx106-elf\include\c++\10.3.0\bits/std_function.h:289
+0x40205c90 in lfs_mount at c:\users\i_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\libraries\littlefs\lib\littlefs/lfs.c:5358
+0x4021ec38 in fs::FS::_defaultTimeCB() at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/FS.h:260
+0x40223613 in loop_wrapper() at C:\Users\I_am_not_a_weeb\.platformio\packages\framework-arduinoespressif8266\cores\esp8266/core_esp8266_main.cpp:255
+
+
+--------------- CUT HERE FOR EXCEPTION DECODER ---------------
+�@q�|���@��v�X	�y.�Q*�]��8���*1T1�	)d�QQ@��*1�"�nZA� )�~�#d�yu1RtY@wA.	5�*���|��)i�~PZ�~1Pz�P��C�/�"�rf cal sector: 252
+freq trace enable 0
+rf[112] : 0�Initializing MQTT.
+MQTT server set:
+MQTT_HOST: 192.168.1.4
+
+Trying: TP-Kink
+..

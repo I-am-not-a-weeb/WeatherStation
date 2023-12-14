@@ -66,10 +66,6 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600, 60000);
 
 std::vector<WiFi_scan_result> scanned_Wifis;
 
-unsigned long serialInterval = 0;
-unsigned long DHT22Interval = 0;
-unsigned long mqqtInterval = 0;
-
 MQ135 gasSensor(A0);
 
 DHT dht(D7, DHT22);
@@ -97,6 +93,8 @@ WiFiEventHandler wifiDisconnectHandler;
 
 #define MQTT_HOST IPAddress(192, 168, 1, 4)
 #define MQTT_PORT 1883
+
+bool save_config = false;
 //=======================================================================
 //                            Interrupts     
 //=======================================================================
@@ -216,20 +214,104 @@ void setup() {
   Serial.println("Initializing MQTT.");
 
   wifiConnectHandler = WiFi.onStationModeGotIP(onWifiConnect);
+  wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
 
   mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 
-  mqttClient.setClientId("GrowBox-Sender2");
+  mqttClient.setClientId("SmartGrowBox");
 
   mqttClient.setKeepAlive(5000);
 
   mqttClient.setCleanSession(true);
 
-
   mqttClient.onConnect([](bool sessionPresent) 
     {
       Serial.println("Connected to MQTT.");
-      mqttClient.subscribe("/update",2);
+
+      mqttClient.subscribe("/settings",2);
+    });
+
+  //MQTT message received callback
+
+  mqttClient.onMessage([](char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) 
+    {
+      Serial.println("Message received, topic: "+String(topic));
+
+      if(strcmp(topic,"/settings")==0)
+      {
+        Serial.println("Settings received.");
+        StaticJsonDocument<512> tmp_configJson;
+
+        DeserializationError jsonErrs = deserializeJson(tmp_configJson, payload);
+
+        if(jsonErrs)
+        {
+          Serial.println("Error: JSON deserialization failed!" + String(jsonErrs.c_str()));
+          return;
+        }
+
+        /*
+        Serial.println(tmp_configJson.as<JsonObject>()["rmv-wifi"].as<String>());
+        Serial.println(tmp_configJson.as<JsonObject>().containsKey("rmv-wifi"));
+        Serial.println(tmp_configJson.as<JsonObject>()["rmv-wifi"].as<JsonArray>());
+        Serial.println("aaa");
+        Serial.println(configJson.as<JsonObject>()["wifi"].as<JsonArray>());
+        Serial.println("bbb");*/
+
+        if(tmp_configJson.as<JsonObject>().containsKey("add-wifi"))
+        {
+          configJson.as<JsonObject>()["wifi"].add(tmp_configJson.as<JsonObject>()["add-wifi"]);
+          Serial.println("Added: " + String(tmp_configJson.as<JsonObject>()["add-wifi"]["ssid"]));
+        }
+
+        if(tmp_configJson.as<JsonObject>().containsKey("rmv-wifi"))
+        {
+          Serial.println("Removing: ");
+          bool trace = false;
+          for(auto kv : tmp_configJson.as<JsonObject>()["rmv-wifi"].as<JsonArray>())
+          {
+            Serial.println(kv.as<String>());
+            auto i = configJson.as<JsonObject>()["wifi"].as<JsonArray>().begin();
+            for(auto to_del : configJson.as<JsonObject>()["wifi"].as<JsonArray>())
+            {
+              Serial.println("Iterator:" + String(i->as<String>()));
+              Serial.println("If: "+ String(to_del["ssid"] == kv["ssid"]));
+              if(to_del["ssid"] == kv["ssid"])
+              {
+                Serial.println("Removed: " + String(i->as<String>()));
+                configJson.as<JsonObject>()["wifi"].as<JsonArray>().remove(i);
+                trace = true;
+                break;
+              }
+              Serial.println("Next");
+              i+=1;
+            }
+            if(trace) 
+            {
+              Serial.println("Trace break");
+              break;
+            }
+            
+          }
+        }
+
+        if(tmp_configJson.as<JsonObject>().containsKey("timezone"))
+        {
+          configJson.as<JsonObject>()["system"].as<JsonObject>()["timezone"] = tmp_configJson.as<JsonObject>()["timezone"];
+          Serial.println("Timezone set to: " + String(tmp_configJson.as<JsonObject>()["timezone"]));
+        }
+
+        save_config = true;
+      }
+      else if(false)
+      {
+        
+      }
+      else
+      {
+        Serial.println("Unknown topic.");
+      }
+
     });
 
   mqttClient.onPublish([](uint16_t packetId) 
@@ -240,7 +322,7 @@ void setup() {
   Serial.println("MQTT server set:");
   Serial.println("MQTT_HOST: "+ MQTT_HOST.toString());
 
-  mqttClient.connect();
+  //mqttClient.connect();
 
   for(unsigned short int i = 0; i < configJson["wifi"].size(); i++)
   {
@@ -272,8 +354,6 @@ void setup() {
     Serial.println(WiFi.BSSIDstr());
     Serial.println(WiFi.channel());
   }
- 
-  wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
 
   GMT = configJson["system"]["timezone"];
 
@@ -309,7 +389,7 @@ void setup() {
     Serial.println(F("Can't set ITimer. Select another freq. or timer"));
 
   //ISR_Timer.setInterval(5000, serialUpdate);
-
+  Serial.println("1");
   Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
 
   /*digitalWrite(D1,LOW);
@@ -318,29 +398,39 @@ void setup() {
   digitalWrite(D4,LOW);*/
 
   Wire.begin(D6,D5);            // (SDA,SCL)
-
+Serial.println("2");
   if(!lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x23, &Wire)) //BH1750::ONE_TIME_HIGH_RES_MODE
   {
     Serial.println(F("Error initialising BH1750"));
   }
 
   timeClient.update();
-
+Serial.println("3");
   server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200, "application/json","{\"temp\": \""
       + String(temp) + "\", \"humi\": \""+String(humi)
       +"\", \"ppm\": \""+String(air_quality)+"\", \"lux\": \""
       +String(lux)+"\", \"rpm\": \"" + String(fanRPM)+"\"}");
   });
-  
+Serial.println("4");
+  while(!mqttClient.connected())
+  {
+    mqttClient.connect();
+    delay(100);
+  }
+Serial.println("5");
   server.begin();
   Serial.println("MQTT server connection status: " + String(mqttClient.connected()));
+  Serial.println("6");
 }
 
 //=======================================================================
 //                              Loop         
 //=======================================================================
 
+unsigned long serialInterval = 0;
+unsigned long DHT22Interval = 0;
+unsigned long mqqtInterval = 0;
 
 void loop() {
 
@@ -383,6 +473,21 @@ void loop() {
     }
     
     mqqtInterval = millis();
+  }
+
+  if(save_config)
+  {
+    Serial.println(configJson.as<String>());
+
+    configFile = LittleFS.open("/config.json", "w");
+
+    serializeJson(configJson, configFile);
+
+    configFile.close();
+
+    Serial.println("Config saved.");
+
+    save_config = false;
   }
 }
 

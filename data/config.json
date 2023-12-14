@@ -6,8 +6,12 @@
             "password": "21371488"
         },
         {
-            "ssid": "NETIASPOT-5Ghz-723300",
+            "ssid": "NETIASPOT-2.4GHz-723300",
             "password": "YDHrnXx3b96d"
+        },
+        {
+            "ssid": "test-test",
+            "password" : "YD453d"
         }
     ],
     "system":
