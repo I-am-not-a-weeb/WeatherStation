@@ -95,6 +95,11 @@ WiFiEventHandler wifiDisconnectHandler;
 #define MQTT_PORT 1883
 
 bool save_config = false;
+
+unsigned long timer_serial  {5000};
+unsigned long timer_dht22   {2000};
+unsigned long timer_mqtt    {10000};
+
 //=======================================================================
 //                            Interrupts     
 //=======================================================================
@@ -297,8 +302,13 @@ void setup() {
 
         if(tmp_configJson.as<JsonObject>().containsKey("timezone"))
         {
-          configJson.as<JsonObject>()["system"].as<JsonObject>()["timezone"] = tmp_configJson.as<JsonObject>()["timezone"];
+          configJson.as<JsonObject>()["timezone"] = tmp_configJson.as<JsonObject>()["timezone"].as<int>();
           Serial.println("Timezone set to: " + String(tmp_configJson.as<JsonObject>()["timezone"]));
+        }
+
+        if(tmp_configJson.as<JsonObject>().containsKey("timers"))
+        {
+
         }
 
         save_config = true;
@@ -428,13 +438,19 @@ Serial.println("5");
 //                              Loop         
 //=======================================================================
 
+//
+//  "serial_timer": 5000
+//  "dht22_timer":  2000
+//  "mqtt_timer":  10000
+
+
 unsigned long serialInterval = 0;
 unsigned long DHT22Interval = 0;
 unsigned long mqqtInterval = 0;
 
 void loop() {
 
-  if(millis()-DHT22Interval>2000)
+  if(millis()-DHT22Interval>timer_dht22)
   {
     serialUpdate();
     updateTempHumi();
@@ -443,13 +459,13 @@ void loop() {
     DHT22Interval = millis();
   }
 
-  if(millis()-serialInterval>5000)
+  if(millis()-serialInterval>timer_serial)
   {
     printSerial();
     serialInterval = millis();
   }
 
-  if(millis()-mqqtInterval>10000)
+  if(millis()-mqqtInterval>timer_mqtt)
   {
     if(mqttClient.connected())
     {
