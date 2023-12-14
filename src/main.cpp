@@ -308,7 +308,23 @@ void setup() {
 
         if(tmp_configJson.as<JsonObject>().containsKey("timers"))
         {
+          if(tmp_configJson.as<JsonObject>()["timers"].as<JsonObject>().containsKey("serial_timer"))
+          {
+            configJson.as<JsonObject>()["timers"].as<JsonObject>()["serial_timer"] = tmp_configJson.as<JsonObject>()["timers"].as<JsonObject>()["serial_timer"].as<unsigned long>();
+            Serial.println("Serial timer set to: " + String(tmp_configJson.as<JsonObject>()["timers"]["serial_timer"]));
+          }
 
+          if(tmp_configJson.as<JsonObject>()["timers"].as<JsonObject>().containsKey("dht22_timer"))
+          {
+            configJson.as<JsonObject>()["timers"].as<JsonObject>()["dht22_timer"] = tmp_configJson.as<JsonObject>()["timers"].as<JsonObject>()["dht22_timer"].as<unsigned long>();
+            Serial.println("DHT22 timer set to: " + String(tmp_configJson.as<JsonObject>()["timers"]["dht22_timer"]));
+          }
+
+          if(tmp_configJson.as<JsonObject>()["timers"].as<JsonObject>().containsKey("mqtt_timer"))
+          {
+            configJson.as<JsonObject>()["timers"].as<JsonObject>()["mqtt_timer"] = tmp_configJson.as<JsonObject>()["timers"].as<JsonObject>()["mqtt_timer"].as<unsigned long>();
+            Serial.println("MQTT timer set to: " + String(tmp_configJson.as<JsonObject>()["timers"]["mqtt_timer"]));
+          }
         }
 
         save_config = true;
