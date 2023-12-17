@@ -216,6 +216,23 @@ void setup() {
     Serial.println("Error: JSON deserialization failed!" + String(jsonErrs.c_str()));
   }
 
+  Serial.println("\nLoading timers.");
+
+  timer_dht22   = configJson.as<JsonObject>()["timers"].as<JsonObject>()["dht22_timer"];
+  timer_serial  = configJson.as<JsonObject>()["timers"].as<JsonObject>()["serial_timer"];
+  timer_mqtt    = configJson.as<JsonObject>()["timers"].as<JsonObject>()["mqtt_timer"];
+
+  Serial.println("DHT22: " + String(timer_dht22));
+  Serial.println("Serial: " + String(timer_serial));
+  Serial.println("MQTT: " + String(timer_mqtt));
+
+  Serial.println("Loading system settings.");   
+
+  GMT = configJson.as<JsonObject>()["system"].as<JsonObject>()["timezone"];
+
+  Serial.println("Timezone: " + String(GMT));
+
+
   Serial.println("Initializing MQTT.");
 
   wifiConnectHandler = WiFi.onStationModeGotIP(onWifiConnect);
@@ -381,8 +398,6 @@ void setup() {
     Serial.println(WiFi.channel());
   }
 
-  GMT = configJson["system"]["timezone"];
-
   //WiFi.begin(ssid, password);  
 
   /*while ( WiFi.status() != WL_CONNECTED ) {
@@ -432,19 +447,25 @@ Serial.println("2");
 
   timeClient.update();
 Serial.println("3");
+
   server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200, "application/json","{\"temp\": \""
       + String(temp) + "\", \"humi\": \""+String(humi)
       +"\", \"ppm\": \""+String(air_quality)+"\", \"lux\": \""
       +String(lux)+"\", \"rpm\": \"" + String(fanRPM)+"\"}");
   });
-Serial.println("4");
+
+  server.on("/settings",HTTP_GET,[](AsyncWebServerRequest *request){
+    request->send(200, "application/json", configJson.as<String>());
+  });
+
+  Serial.println("4");
   while(!mqttClient.connected())
   {
     mqttClient.connect();
     delay(100);
   }
-Serial.println("5");
+  Serial.println("5");
   server.begin();
   Serial.println("MQTT server connection status: " + String(mqttClient.connected()));
   Serial.println("6");
@@ -458,7 +479,6 @@ Serial.println("5");
 //  "serial_timer": 5000
 //  "dht22_timer":  2000
 //  "mqtt_timer":  10000
-
 
 unsigned long serialInterval = 0;
 unsigned long DHT22Interval = 0;
