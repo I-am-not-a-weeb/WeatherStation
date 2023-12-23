@@ -184,7 +184,7 @@ void onWifiConnect(const WiFiEventStationModeGotIP& event) {
 
 void onWifiDisconnect(const WiFiEventStationModeDisconnected& event) {
   Serial.println("Disconnected from Wi-Fi.");
-  mqttReconnectTimer.detach(); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
+  //mqttReconnectTimer.detach(); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
 }
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
@@ -463,7 +463,7 @@ Serial.println("3");
   while(!mqttClient.connected())
   {
     mqttClient.connect();
-    delay(100);
+    delay(1000);
   }
   Serial.println("5");
   server.begin();
@@ -505,16 +505,16 @@ void loop() {
   {
     if(mqttClient.connected())
     {
-      //Serial.println("Trying to send data to server.");
-
       String tmp {"{\"temp\": \""
       + String(temp) + "\", \"humi\": \""+String(humi)
       +"\", \"ppm\": \""+String(air_quality)+"\", \"lux\": \""
       +String(lux)+"\", \"rpm\": \"" + String(fanRPM)+"\"}"};
 
-    yield();
+      Serial.println(tmp.c_str());
 
-    mqttClient.publish("server/update",2,true,tmp.c_str(), tmp.length()+1, false);
+      yield();
+
+      mqttClient.publish("/update",2,true,tmp.c_str(), tmp.length()+1, false);
     }
     else
     {
