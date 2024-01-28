@@ -91,7 +91,9 @@ Ticker mqttReconnectTimer;
 WiFiEventHandler wifiConnectHandler;
 WiFiEventHandler wifiDisconnectHandler;
 
-#define MQTT_HOST IPAddress(192, 168, 1, 4)
+#define MQTT_HOST IPAddress(192, 168, 137, 1)
+//#define MQTT_HOST IPAddress(192, 168, 1, 4)
+
 #define MQTT_PORT 1883
 
 bool save_config = false;
@@ -462,6 +464,7 @@ Serial.println("3");
   Serial.println("4");
   while(!mqttClient.connected())
   {
+    mqttClient.disconnect();
     mqttClient.connect();
     delay(1000);
   }
